@@ -111,6 +111,13 @@ class MessageHandler(object):
 
     @asyncio.coroutine
     def handle_forward(self, event):
+        # Save message
+        out = open(event.conv_id + '.txt', 'a+')
+        out.write(''.join(event.user.full_name + ": "))
+        out.write('' + event.text)
+        out.write("\n")
+        out.close()
+
         # Test if message forwarding is enabled
         if not self.bot.get_config_suboption(event.conv_id, 'forwarding_enabled'):
             return

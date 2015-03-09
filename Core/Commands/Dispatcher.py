@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime
 import traceback
+import hangups
 
 ''' To use this, either add on to the ExtraCommands.py file or create your own Python file. Import the DispatcherSingleton
 and annotate any function that you wish to be a command with the @DispatcherSingleton.register annotation, and it will
