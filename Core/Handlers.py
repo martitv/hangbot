@@ -80,6 +80,7 @@ class MessageHandler(object):
 
         # Parse message
         line_args = shlex.split(event.text, posix=False)
+        line_args = [x.lower() for x in line_args]
         i = 0
         while i < len(line_args):
             line_args[i] = line_args[i].strip()
