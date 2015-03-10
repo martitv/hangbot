@@ -30,9 +30,11 @@ class MessageHandler(object):
     @asyncio.coroutine
     def handle(self, event):
         # Save message
+        fullname = event.user.full_name
+        name = fullname.split()
         out = open(event.conv_id + '.txt', 'a+')
         out.write('' + event.timestamp.strftime("[%Y-%m-%d %H:%M:%S] ") )
-        out.write("<" +''.join(event.user.full_name + "> "))
+        out.write("<" + name[0] + "" +  name[1] + "> ")
         out.write('' + event.text)
         out.write("\n")
         out.close()
