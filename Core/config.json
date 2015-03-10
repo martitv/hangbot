@@ -25,8 +25,9 @@
       ],
       "Du er det svakeste mennesket. Farvel."
     ],
+    [
       [
-        "gitbot"
+        "gitbot",
         "git bot"
       ],
       "http://github.com/BigJones/hangbot"
@@ -35,7 +36,7 @@
       [
         "bitch"
       ],
-      "I ani't nobody's bitch!"
+      "I ain't nobody's bitch!"
     ]
   ],
   "autoreplies_enabled": true,
@@ -78,7 +79,10 @@
       "autoreplies_enabled": true
     },
     "UgxbkOAGq9B-FL1RfpB4AaABAQ": {
-      "autoreplies_enabled": false
+      "autoreplies_enabled": true
+    },
+    "Ugy0NMnb8FYjCcXyu4d4AaABAQ": {
+      "autoreplies_enabled": true
     },
     "Ugy2S52b2NeEexKIg0d4AaABAQ": {
       "autoreplies_enabled": true
