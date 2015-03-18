@@ -568,8 +568,8 @@ def lunsj(bot, event, *args):
 			
 
 
-	url = urlFred
-	format_func = format_fred
+	url = ""
+	format_func = ""
 	if len(args) < 1:
 		bot.send_message_segments(event.conv, usage)
 		return
