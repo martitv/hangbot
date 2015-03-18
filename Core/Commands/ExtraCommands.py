@@ -554,6 +554,7 @@ def lunsj(bot, event, *args):
 
 		result = {}
 		day = datetime.today().strftime("%A")
+		day = "Tuesday"
 		for i in range(len(days)):
 			result[days[i]] = (food[i*2], food[i*2+1]) #To foods pr day
 			
@@ -581,6 +582,9 @@ def lunsj(bot, event, *args):
 			return
 		url = urlFred
 		format_func = format_fred
+	else:
+		bot.send_message_segments(event.conv, usage)
+		return
 		
 	#Opens given url and returns html
 	page = urllib.request.urlopen(url, timeout=10)
