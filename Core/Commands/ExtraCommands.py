@@ -485,9 +485,9 @@ def lunsj(bot, event, *args):
 
 	usage = [	hangups.ChatMessageSegment('USAGE:', is_bold=True),
 				hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK),
-				hangups.ChatMessageSegment('/lunsj ifi <optional: dagens/vegetar/halal> (Informatikkafeen)'),
+				hangups.ChatMessageSegment('/lunsj ifi (Informatikkafeen)'),
 				hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK),
-				hangups.ChatMessageSegment('/lunsj fred (Frederikke spiseri)')
+				hangups.ChatMessageSegment('/lunsj fred <dagens/vegetar/halal> (Frederikke spiseri)')
 			]
 	#Fredrikke cafe url
 	urlFred = 'http://www.sio.no/wps/portal/!ut/p/c5/04_SB8K8xLLM9MSSzPy8xBz9CP0os3gDfwNvJ0dTP0NXAyNDA38TC3cDKADKR2LKmyDkidGNAzgS0h0Oci1-28HyuM3388jPTdUvyA2NMMgyUQQAAcWpkQ!!/dl3/d3/L0lDU0lKSWdrbUEhIS9JRFJBQUlpQ2dBek15cXchLzRCRWo4bzBGbEdpdC1iWHBBRUEhLzdfME8wS0JBNU4xRTBNSDJWMzVQMDAwMDAwMDAvN2x0YlQ2Mzk3MDAxOQ!!/?WCM_PORTLET=PC_7_0O0KBA5N1E0MH2V35P00000000000000_WCM&WCM_GLOBAL_CONTEXT=/wps/wcm/connect/migration/sio/mat+og+drikke/dagens+middag/frederikke+spiseri'
@@ -506,13 +506,13 @@ def lunsj(bot, event, *args):
 				self.addFlag = False
 			else:
 				self.fed.append(d)
+		#Fixes string splittig on the special character &
 		def handle_entityref(self, ref):
 			self.fed[-1] += self.unescape("&%s;" % ref)
 			self.addFlag = True
 		def get_data(self):
 			return self.fed
 			
-	enToNo = {'Monday':'Mandag', 'Tuesday':'Tirsdag', 'Wednesday':'Onsdag', 'Thursay':'Torsdag', 'Friday':'Fredag'}
 
 	#Strips tags from given html
 	def strip_tags(html):
@@ -525,13 +525,13 @@ def lunsj(bot, event, *args):
 	def format_fred(data):
 		tmp = [x for x in data if x not in ['\n']]
 		dict = {}
-		iD = tmp.index("Dagens:")
+		iD = tmp.index("Dagens:")   #Finds index of Dagens/Vegetar/Halal
 		iV = tmp.index("Vegetar: ")
 		iH = tmp.index("Halal:")
 		
-		dict[tmp[:iV][0][:-1].lower()] = tmp[:iV][1:]
-		dict[tmp[iV:][0][:-2].lower()] = tmp[iV:iH][1:]
-		dict[tmp[iH:][0][:-1].lower()] = tmp[iH:][1:]
+		dict[tmp[:iV][0][:-1].lower()] = tmp[:iV][1:]    #Creates an entry in the dictionary with Dagens as key and listcontent uptil Vegetar-index as value
+		dict[tmp[iV:][0][:-2].lower()] = tmp[iV:iH][1:]	 #Creates an entry in the dictionary with Vegetar as key and listcontent uptil Halal-index as value
+		dict[tmp[iH:][0][:-1].lower()] = tmp[iH:][1:]    #Creates an entry in the dictionary with Halal as key and rest of listcontent as value
 		
 		segments = [	hangups.ChatMessageSegment(args[1].upper() + ":", is_bold=True),
 						hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK)
@@ -541,6 +541,8 @@ def lunsj(bot, event, *args):
 			segments.append(hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK))
 		return segments
 
+	#Used to translate current day to norwegian for dict-key purposes.
+	enToNo = {'Monday':'Mandag', 'Tuesday':'Tirsdag', 'Wednesday':'Onsdag', 'Thursday':'Torsdag', 'Friday':'Fredag'}
 	#Format function for fredrikke
 	#Returns a formatted string.
 	def format_ifi(data):
@@ -548,14 +550,12 @@ def lunsj(bot, event, *args):
 		data = [x for x in data if x not in ['\n', '\xc2\xa0', '\xa0', 'Dagens: ', 'Vegetar:']]
 		days = data[:5]
 		food = data[5:]
-		food.append("No veggie today D:")
+		food.append("No veggie today D:") #Incase dagens and vegetar are the same on fridays.
 
 		result = {}
 		day = datetime.today().strftime("%A")
-		#resultStr = ""
 		for i in range(len(days)):
-			#resultStr += days[i] + ":\n" + "\tDagens : " + food[i*2] + "\n\tVegetar: " + food[i*2+1] + "\n\n"
-			result[days[i]] = (food[i*2], food[i*2+1])
+			result[days[i]] = (food[i*2], food[i*2+1]) #To foods pr day
 			
 		segments = [	hangups.ChatMessageSegment(enToNo[day], is_bold=True),
 						hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK),
@@ -598,14 +598,4 @@ def lunsj(bot, event, *args):
 	else:
 		print("ERROR")
 	page.close()
-	
-"""
-segments = [hangups.ChatMessageSegment('Quote', is_bold=True),
-                    hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK),
-                    hangups.ChatMessageSegment(
-                        'Usage: /quote <optional: terms to search for> <optional: number of quote to show>'),
-                    hangups.ChatMessageSegment('\n', hangups.SegmentType.LINE_BREAK),
-                    hangups.ChatMessageSegment('Purpose: Shows a quote.')]
-        bot.send_message_segments(event.conv, segments)
-"""
 
